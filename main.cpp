@@ -1,6 +1,10 @@
 #include <iostream>                         /* allows user input and output */
 #include <fstream>                          /* allows file input and output */
+#include <cstdlib>                          /* allows rand() */
+#include <string>
 using namespace std;
+
+#include "Submarine.h"
 
 int main()  {
 
@@ -18,7 +22,8 @@ int main()  {
         exit(2);
     }
 
-//fout << "TESTING" << endl;   // DELETE ME !!!!!
+    fout << "s" << endl;   // DELETE ME !!!!!
+    fout << "JACK SPARROW" << endl;
 
     while (fin >> line) {                   /* for each line received from file, increment lineCount */
         lineCount++;
@@ -57,8 +62,9 @@ int main()  {
                     if (menuChoice2 == 3) { /* yes, continue */
                         cout << endl; cout << "Erasing game data..." << endl; cout << endl;
                         newGame = true;
+                        loadGame = false;
                         menu = true;
-        // TODO: erase info in savefile.txt
+                        // TODO: erase info in savefile.txt
                         fout << "s" << endl;
                         break;
                     }
@@ -76,6 +82,7 @@ int main()  {
 
                 else if (lineCount == 0) {  /* if file is empty */
                     cout << endl; cout << "Starting new game!" << endl; cout << endl;
+                    loadGame = false;
                     newGame = true;     
                     menu = true;            /* ends menu switch statement */
                     fout << "s" << endl;
@@ -91,6 +98,7 @@ int main()  {
 
                 else if (lineCount != 0) {  /* if file is NOT empty */
                     cout << endl; cout << "Loading saved game..." << endl; cout << endl;
+                    newGame = false;
                     loadGame = true;
                     menu = true;            /* ends menu switch statement */
                     break;                  /* skips to while () */
@@ -103,19 +111,28 @@ int main()  {
         }
     } while (!menu);                        /* while menu != true, restart do {} */
 
+    // newGame
 
+    string userName;
+    const int USER_LINE = 2;
 
+    int i = 0;
 
-    // if newgame = true
-        // if file is written to, reset file io to empty (resets game progress)
-        // ask for name input
-        // write name to file
-        // set PROG = 1; (PROG gets incremented per reef explored)
+    if (loadGame = true) {
+        fin >> userName;
 
-    // if loadgame = true
-        // if file is empty, return error and loop back to beginning
-        // if file is written to, use file stats to write to game stats
-        // skip to reef that matches PROG
+        /* for (int i = 1; i < USER_LINE; i++) {
+            getline(fin, userName);
+        } */
+
+        cout << "Welcome back, Captain " <<  << "!" << endl; cout << endl;
+    }
+
+    else if (newGame = true) {
+        cout << "Enter your name: " << endl; cin >> userName;
+        cout << "Howdy, Captain " << userName << "!" << endl; cout << endl;
+        fout << userName << endl;
+    }
 
     // if PROG = 1;
         // spawn random crew members (5-15)
