@@ -1,15 +1,8 @@
-#include <iostream>                 /* allows user input and output */
-#include <fstream>                  /* allows file input and output */
+#include <iostream>                         /* allows user input and output */
+#include <fstream>                          /* allows file input and output */
 using namespace std;
 
 int main()  {
-    bool newGame = false;
-    bool loadGame = false;
-
-    string progress = "";
-
-    bool menu = false;              /* menu switch statement */
-    int menuChoice = 0;             /* menu switch statement */
 
     // file io
 
@@ -17,12 +10,18 @@ int main()  {
     int lineCount = 0;
 
     const string FILENAME = "savefile.txt";
-    ifstream fin(FILENAME);         /* read from file */
-    ofstream fout(FILENAME);        /* write to file */
+    ifstream fin(FILENAME);                 /* read from file */
+    ofstream fout(FILENAME);                /* write to file */
 
-    if (!fin.is_open()) {           /* if file does not exist */
+    if (!fin.is_open()) {                   /* if file does not exist */
         cout << endl; cout << "How did you manage to get this error..." << endl; cout << endl;
         exit(2);
+    }
+
+//fout << "TESTING" << endl;   // DELETE ME !!!!!
+
+    while (fin >> line) {                   /* for each line received from file, increment lineCount */
+        lineCount++;
     }
 
     // title card
@@ -35,30 +34,77 @@ int main()  {
 
     // menu switch statement
 
+    bool menu = false;
+
+    int menuChoice = 0;
+    int menuChoice2 = 0;
+
+    bool newGame = false;
+    bool loadGame = false;
+
     do {
         cout << "1) Start New Game" << endl;
         cout << "2) Load Previous Game" << endl;
         cout << "Enter choice [1, 2]: " << endl;
         cin >> menuChoice;
-        switch (menuChoice) {
-            case 1:                 /* if menuChoice == 1 */
-                // TODO: check that file exists/is empty, if yes, ask "This will erase previous game progress. Continue?" if yes, then continue, if no, break
-                newGame = true;
-                menu = true;
-                progress = "S";     /* S = start game */
-                break;              /* skips to while () */
-            
-            case 2:                 /* if menuChoice == 2 */
-                // TODO: check if file exists/is empty, if not exist, print "Oops, no saved game progress found. Try again!" and break. if exist, loadgame = true
-                loadGame = true;
-                // TODO: progress = fileProgress;
-                break;
 
-            default:                /* if menuChoice != case 1 || menuChoice != case 2 */
+        switch (menuChoice) {
+
+            case 1:                         /* if menuChoice == 1 */
+                if (lineCount != 0) {       /* if file is NOT empty */
+                    cout << endl; cout << "This will erase previous game progress. Continue? [3 = Yes, 4 = No]" << endl;
+                    cin >> menuChoice2;
+                    if (menuChoice2 == 3) { /* yes, continue */
+                        cout << endl; cout << "Erasing game data..." << endl; cout << endl;
+                        newGame = true;
+                        menu = true;
+        // TODO: erase info in savefile.txt
+                        fout << "s" << endl;
+                        break;
+                    }
+
+                    else if (menuChoice2 == 4) { /* no, exit */
+                        cout << endl; cout << "Returning to main menu..." << endl; cout << endl;
+                        break;
+                    }
+
+                    else {                  /* not 3 or 4 */
+                        cout << endl; cout << "Invalid option, try again!" << endl; cout << endl;
+                        break;
+                    }
+                }
+
+                else if (lineCount == 0) {  /* if file is empty */
+                    cout << endl; cout << "Starting new game!" << endl; cout << endl;
+                    newGame = true;     
+                    menu = true;            /* ends menu switch statement */
+                    fout << "s" << endl;
+                    break;                  /* skips to while () */
+                }
+            
+            
+            case 2:                         /* if menuChoice == 2 */
+                if (lineCount == 0) {       /* if file is empty */
+                    cout << endl; cout << "Saved game data not found!" << endl; cout << endl;
+                    break;
+                }
+
+                else if (lineCount != 0) {  /* if file is NOT empty */
+                    cout << endl; cout << "Loading saved game..." << endl; cout << endl;
+                    loadGame = true;
+                    menu = true;            /* ends menu switch statement */
+                    break;                  /* skips to while () */
+                }
+
+
+            default:
                 cout << endl; cout << "Invalid option, try again!" << endl; cout << endl;
                 break;
         }
-    } while (!menu);                /* while menu != true, restart do {} */
+    } while (!menu);                        /* while menu != true, restart do {} */
+
+
+
 
     // if newgame = true
         // if file is written to, reset file io to empty (resets game progress)
@@ -83,8 +129,8 @@ int main()  {
     // if PROG = 2;
     
 
-    fin.close();                    /* close read from file */
-    fout.close();                   /* close write to file */
+    fin.close();                            /* close read from file */
+    fout.close();                           /* close write to file */
 
     return 0;
 }
