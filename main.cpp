@@ -1,4 +1,5 @@
-#include <iostream>
+#include <iostream>                 /* allows user input and output */
+#include <fstream>                  /* allows file input and output */
 using namespace std;
 
 int main()  {
@@ -7,22 +8,34 @@ int main()  {
 
     string progress = "";
 
-    bool menu = false;
-    int menuChoice = 0;
+    bool menu = false;              /* menu switch statement */
+    int menuChoice = 0;             /* menu switch statement */
+
+    // file io
+
+    string line;
+    int lineCount = 0;
+
+    const string FILENAME = "savefile.txt";
+    ifstream fin(FILENAME);         /* read from file */
+    ofstream fout(FILENAME);        /* write to file */
+
+    if (!fin.is_open()) {           /* if file does not exist */
+        cout << endl; cout << "How did you manage to get this error..." << endl; cout << endl;
+        exit(2);
+    }
 
     // title card
 
     cout << "  __                _  o         __    _              _             "      << endl;
     cout << " /_`) __  _    ___ )L  _  __    /_`) __))__ _ __ _ _  )L _    __  __"      << endl;
     cout << "(( ( ((_)((_( ((_( (( (( ((_   (( ( ((_( \\(/'(('((\\( (( ((_( (|  (('"    << endl;
-    cout << "       ))                                                          "       << endl;
-    cout << endl;
-    cout << "                        by TwoHeadedShark                          "       << endl;
-    cout << endl;
+    cout << "       ))                                                          "       << endl; cout << endl;
+    cout << "                        by TwoHeadedShark                          "       << endl; cout << endl;
 
-    // initial menu (switch statement)
+    // menu switch statement
 
-    do {                            /* while menu != true, do this: */
+    do {
         cout << "1) Start New Game" << endl;
         cout << "2) Load Previous Game" << endl;
         cout << "Enter choice [1, 2]: " << endl;
@@ -42,12 +55,10 @@ int main()  {
                 break;
 
             default:                /* if menuChoice != case 1 || menuChoice != case 2 */
-                cout << endl;
-                cout << "Invalid option, try again!" << endl;
-                cout << endl;
+                cout << endl; cout << "Invalid option, try again!" << endl; cout << endl;
                 break;
         }
-    } while (!menu);
+    } while (!menu);                /* while menu != true, restart do {} */
 
     // if newgame = true
         // if file is written to, reset file io to empty (resets game progress)
@@ -72,7 +83,8 @@ int main()  {
     // if PROG = 2;
     
 
-    
+    fin.close();                    /* close read from file */
+    fout.close();                   /* close write to file */
 
     return 0;
 }
