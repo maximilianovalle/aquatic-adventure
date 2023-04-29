@@ -8,7 +8,7 @@ using namespace std;
 
 int main()  {
 
-    // file io
+    // file io 1
 
     string line;
     int lineCount = 0;
@@ -23,11 +23,14 @@ int main()  {
     }
 
     fout << "s" << endl;   // DELETE ME !!!!!
-    fout << "JACK SPARROW" << endl;
+    fout << "Jack Sparrow" << endl;
 
     while (fin >> line) {                   /* for each line received from file, increment lineCount */
         lineCount++;
     }
+
+    fin.close();                            /* close read from file */
+    fout.close();                           /* close write to file */
 
     // title card
 
@@ -44,9 +47,6 @@ int main()  {
     int menuChoice = 0;
     int menuChoice2 = 0;
 
-    bool newGame = false;
-    bool loadGame = false;
-
     do {
         cout << "1) Start New Game" << endl;
         cout << "2) Load Previous Game" << endl;
@@ -61,11 +61,20 @@ int main()  {
                     cin >> menuChoice2;
                     if (menuChoice2 == 3) { /* yes, continue */
                         cout << endl; cout << "Erasing game data..." << endl; cout << endl;
-                        newGame = true;
-                        loadGame = false;
                         menu = true;
-                        // TODO: erase info in savefile.txt
-                        fout << "s" << endl;
+                        
+                        ifstream finDelete(FILENAME);                                   /* delets content in file */
+                        ofstream foutDelete;
+                        foutDelete.open(FILENAME, ofstream::out | ofstream::trunc);
+                        finDelete.close();
+                        foutDelete.close();
+
+                        ofstream fout_1(FILENAME, _S_app);                              /* append "s" to file */
+                        fout_1 << "s" << endl;
+                        fout_1.close();
+
+                        lineCount = 0;
+                        lineCount++;
                         break;
                     }
 
@@ -81,11 +90,14 @@ int main()  {
                 }
 
                 else if (lineCount == 0) {  /* if file is empty */
-                    cout << endl; cout << "Starting new game!" << endl; cout << endl;
-                    loadGame = false;
-                    newGame = true;     
+                    cout << endl; cout << "Starting new game!" << endl; cout << endl;   
                     menu = true;            /* ends menu switch statement */
-                    fout << "s" << endl;
+
+                    ofstream fout_2(FILENAME, _S_app);                              /* append "s" to file */
+                    fout_2 << "s" << endl;
+                    fout_2.close();
+
+                    lineCount++;
                     break;                  /* skips to while () */
                 }
             
@@ -98,8 +110,6 @@ int main()  {
 
                 else if (lineCount != 0) {  /* if file is NOT empty */
                     cout << endl; cout << "Loading saved game..." << endl; cout << endl;
-                    newGame = false;
-                    loadGame = true;
                     menu = true;            /* ends menu switch statement */
                     break;                  /* skips to while () */
                 }
@@ -111,30 +121,45 @@ int main()  {
         }
     } while (!menu);                        /* while menu != true, restart do {} */
 
-    // newGame
+    // userName
 
     string userName;
-    const int USER_LINE = 2;
-
     int i = 0;
 
-    if (loadGame = true) {
-        fin >> userName;
+    ifstream fin2(FILENAME);                 /* read from file 2 */
+    ofstream fout2(FILENAME, _S_app);        /* append to file 2 */
 
-        /* for (int i = 1; i < USER_LINE; i++) {
-            getline(fin, userName);
-        } */
-
-        cout << "Welcome back, Captain " <<  << "!" << endl; cout << endl;
+    if (lineCount > 1) {
+        while (getline(fin2, line)) {
+            if (i == 1) {
+                userName = line;
+            }
+            i++;
+        }
+        cout << "Welcome back, Captain " << userName << "!" << endl; cout << endl;
     }
 
-    else if (newGame = true) {
+    else if (lineCount == 1) {
         cout << "Enter your name: " << endl; cin >> userName;
         cout << "Howdy, Captain " << userName << "!" << endl; cout << endl;
-        fout << userName << endl;
+        fout2 << userName << endl;
+        lineCount++;
     }
 
-    // if PROG = 1;
+    else {
+        cout << "You getting this error should not be possible..." << endl;
+    }
+
+    fin2.close();
+    fout2.close();
+
+    // random spawn
+
+    if (lineCount == 2) {
+        Submarine();
+    }
+
+    // if lineCount == 2 (s + userName)
         // spawn random crew members (5-15)
         // spawn random air (5-15)
         // spawn random fuel (5-15)
@@ -144,10 +169,6 @@ int main()  {
         // PROG+1;
     
     // if PROG = 2;
-    
-
-    fin.close();                            /* close read from file */
-    fout.close();                           /* close write to file */
 
     return 0;
 }
