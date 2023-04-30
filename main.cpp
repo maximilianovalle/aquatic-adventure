@@ -22,8 +22,11 @@ int main()  {
         exit(2);
     }
 
-    fout << "s" << endl;   // DELETE ME !!!!!
-    fout << "Jack Sparrow" << endl;
+    fout << "s" << endl;                // DELETE ME !!!!!
+    fout << "Jack Sparrow" << endl;     // DELETE ME !!!!!!!!!!!
+    fout << "7" << endl;                // DELETE ME !!!!!!!!
+    fout << "12" << endl;               // DELETE ME
+    fout << "15" << endl;               // DELETE ME
 
     while (fin >> line) {                   /* for each line received from file, increment lineCount */
         lineCount++;
@@ -126,10 +129,10 @@ int main()  {
     string userName;
     int i = 0;
 
-    ifstream fin2(FILENAME);                 /* read from file 2 */
-    ofstream fout2(FILENAME, _S_app);        /* append to file 2 */
+    ifstream fin2(FILENAME);                /* read from file 2 */
+    ofstream fout2(FILENAME, _S_app);       /* append to file 2 */
 
-    if (lineCount > 1) {
+    if (lineCount > 1) {                    /* if file has more lines than 1 ("s") */
         while (getline(fin2, line)) {
             if (i == 1) {
                 userName = line;
@@ -139,7 +142,7 @@ int main()  {
         cout << "Welcome back, Captain " << userName << "!" << endl; cout << endl;
     }
 
-    else if (lineCount == 1) {
+    else if (lineCount == 1) {              /* if file has only one line ("s") */
         cout << "Enter your name: " << endl; cin >> userName;
         cout << "Howdy, Captain " << userName << "!" << endl; cout << endl;
         fout2 << userName << endl;
@@ -155,20 +158,56 @@ int main()  {
 
     // random spawn
 
+    ifstream fin3(FILENAME);                 /* read from file 3 */
+    ofstream fout3(FILENAME, _S_app);        /* append to file 3 */
+    i = 0;                                   /* start counting from 0 */
+
+    //cout << "LINECOUNT:" << lineCount << endl;                                              // DELETE ME !!!!!!
+
+    Submarine playerSub;
+
     if (lineCount == 2) {
-        Submarine();
+        cout << "Randomizing submarine stats..." << endl; cout << endl;
+        playerSub = Submarine();
+
+        cout << "Fuel Amount: " << playerSub.getFuel() << "/" << playerSub.getFuelCap() << endl;
+        cout << "Air Amount: " << playerSub.getAir() << "/" << playerSub.getAirCap() << endl;
+        cout << "Crew Amount: " << playerSub.getCrew() << "/" << playerSub.getCrewCap() << endl;
+
+        cout << endl; cout << "Game ends if any of these stats reach 0!" << endl; cout << endl;
     }
 
-    // if lineCount == 2 (s + userName)
-        // spawn random crew members (5-15)
-        // spawn random air (5-15)
-        // spawn random fuel (5-15)
-        // submarine menu [cargosubmarine, gasomarine, oxygenarine]
-        // add sub stats to random spawns
-        // write^ to file
-        // PROG+1;
-    
-    // if PROG = 2;
+    else if (lineCount > 2) {
+        cout << "Gathering saved submarine stats..." << endl; cout << endl;
+        string fS; string aS; string cS;
+        int f; int a; int c;
+        while (getline(fin3, line)) {   // TODO: GATHER TURN STATS TO INT AND CREATE SUBMARINE OBJECT W STATS FROM FILE
+            if (i == 2) {                       /* fuel is on line 3 */
+                //f = line;
+            }
+
+            else if (i == 3) {                  /* air is on line 4 */
+                //a = line;
+            }
+
+            else if (i == 4) {                  /* crew is on line 5 */
+                //c = line;
+            }
+
+            i++;
+        } 
+
+        //playerSub = Submarine(f, a, c);
+
+        cout << "Fuel Amount: " << playerSub.getFuel() << "/" << playerSub.getFuelCap() << endl;
+        cout << "Air Amount: " << playerSub.getAir() << "/" << playerSub.getAirCap() << endl;
+        cout << "Crew Amount: " << playerSub.getCrew() << "/" << playerSub.getCrewCap() << endl;
+
+        cout << "Remember not to let these stats reach 0!" << endl; cout << endl;
+    }
+
+    fin3.close();
+    fout3.close();
 
     return 0;
 }

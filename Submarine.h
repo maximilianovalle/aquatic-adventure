@@ -19,7 +19,7 @@ class Submarine {
         virtual void incFuelCap(int f);     /* increases fuel capacity */
         virtual void incAirCap(int a);      /* increases air capacity */
         virtual void incCrewCap(int c);     /* increases crew capacity */
-        
+
         virtual void decFuelCap(int f);     /* decreases fuel capacity */
         virtual void decAirCap(int a);      /* decreases air capacity */
         virtual void decCrewCap(int c);     /* decreases crew capacity */
@@ -28,9 +28,13 @@ class Submarine {
         void removeAir(int a);              /* removes a from airAmnt */
         void removeCrew(int c);             /* removes c from crewAmnt */
 
-        int getFuel();                      /* returns (fuelAmnt/fuelCapacity) */
-        int getAir();                       /* returns (airAmnt/airCapacity) */
-        int getCrew();                      /* returns (crewAmnt/crewCapacity) */
+        int getFuel();                      /* returns fuelAmnt */
+        int getAir();                       /* returns airAmnt */
+        int getCrew();                      /* returns crewAmnt */
+
+        int getFuelCap();                   /* returns fuelCapacity */
+        int getAirCap();                    /* returns airCapacity */
+        int getCrewCap();                   /* returns crewCapacity */
 
     protected:
         int fuelAmnt;                       /* curr amnt of fuel */
@@ -191,6 +195,18 @@ int Submarine::getAir(){
 
 int Submarine::getCrew() {
     return crewAmnt;
+}
+
+int Submarine::getFuelCap(){
+    return fuelCapacity;
+}
+
+int Submarine::getAirCap(){
+    return airCapacity;
+}
+
+int Submarine::getCrewCap(){
+    return crewCapacity;
 }
 
 #endif
